@@ -1,0 +1,284 @@
+% --- force emacs to latex mode -*-latex-*-
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%
+%  Common definitions
+%
+%  N.B. use of \providecommand rather than \newcommand means
+%       that a definition is ignored if already specified
+%
+%                                              L. Taylor 18 Feb 2005
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+% Some shorthand
+% turn off italics
+\newcommand {\etal}{\mbox{et al.}\xspace} %et al. - no preceding comma
+\newcommand {\ie}{\mbox{i.e.}\xspace}     %i.e.
+\newcommand {\eg}{\mbox{e.g.}\xspace}     %e.g.
+\newcommand {\etc}{\mbox{etc.}\xspace}     %etc.
+\newcommand {\vs}{\mbox{\sl vs.}\xspace}      %vs.
+\newcommand {\mdash}{\ensuremath{\mathrm{-}}} % for use within formulas
+
+% some terms whose definition we may change
+\newcommand {\Lone}{Level-1\xspace} % Level-1 or L1 ?
+\newcommand {\Ltwo}{Level-2\xspace}
+\newcommand {\Lthree}{Level-3\xspace}
+
+% Some software programs (alphabetized)
+\providecommand{\ACERMC} {\textsc{AcerMC}\xspace}
+\providecommand{\ALPGEN} {{\textsc{alpgen}}\xspace}
+\providecommand{\CHARYBDIS} {{\textsc{charybdis}}\xspace}
+\providecommand{\CMKIN} {\textsc{cmkin}\xspace}
+\providecommand{\CMSIM} {{\textsc{cmsim}}\xspace}
+\providecommand{\CMSSW} {{\textsc{cmssw}}\xspace}
+\providecommand{\COBRA} {{\textsc{cobra}}\xspace}
+\providecommand{\COCOA} {{\textsc{cocoa}}\xspace}
+\providecommand{\COMPHEP} {\textsc{CompHEP}\xspace}
+\providecommand{\EVTGEN} {{\textsc{evtgen}}\xspace}
+\providecommand{\FAMOS} {{\textsc{famos}}\xspace}
+\providecommand{\GARCON} {\textsc{garcon}\xspace}
+\providecommand{\GARFIELD} {{\textsc{garfield}}\xspace}
+\providecommand{\GEANE} {{\textsc{geane}}\xspace}
+\providecommand{\GEANTfour} {{\textsc{geant4}}\xspace}
+\providecommand{\GEANTthree} {{\textsc{geant3}}\xspace}
+\providecommand{\GEANT} {{\textsc{geant}}\xspace}
+\providecommand{\HDECAY} {\textsc{hdecay}\xspace}
+\providecommand{\HERWIG} {{\textsc{herwig}}\xspace}
+\providecommand{\HIGLU} {{\textsc{higlu}}\xspace}
+\providecommand{\HIJING} {{\textsc{hijing}}\xspace}
+\providecommand{\IGUANA} {\textsc{iguana}\xspace}
+\providecommand{\ISAJET} {{\textsc{isajet}}\xspace}
+\providecommand{\ISAPYTHIA} {{\textsc{isapythia}}\xspace}
+\providecommand{\ISASUGRA} {{\textsc{isasugra}}\xspace}
+\providecommand{\ISASUSY} {{\textsc{isasusy}}\xspace}
+\providecommand{\ISAWIG} {{\textsc{isawig}}\xspace}
+\providecommand{\MADGRAPH} {\textsc{MadGraph}\xspace}
+\providecommand{\MCATNLO} {\textsc{mc@nlo}\xspace}
+\providecommand{\MCFM} {\textsc{mcfm}\xspace}
+\providecommand{\MILLEPEDE} {{\textsc{millepede}}\xspace}
+\providecommand{\ORCA} {{\textsc{orca}}\xspace}
+\providecommand{\OSCAR} {{\textsc{oscar}}\xspace}
+\providecommand{\PHOTOS} {\textsc{photos}\xspace}
+\providecommand{\PROSPINO} {\textsc{prospino}\xspace}
+\providecommand{\PYTHIA} {{\textsc{pythia}}\xspace}
+\providecommand{\SHERPA} {{\textsc{sherpa}}\xspace}
+\providecommand{\TAUOLA} {\textsc{tauola}\xspace}
+\providecommand{\TOPREX} {\textsc{TopReX}\xspace}
+\providecommand{\XDAQ} {{\textsc{xdaq}}\xspace}
+
+
+%  Experiments
+\newcommand {\DZERO}{D\O\xspace}     %etc.
+
+
+% Measurements and units...
+
+\newcommand{\de}{\ensuremath{^\circ}}
+\newcommand{\ten}[1]{\ensuremath{\times \text{10}^\text{#1}}}
+\newcommand{\unit}[1]{\ensuremath{\text{\,#1}}\xspace}
+\newcommand{\mum}{\ensuremath{\,\mu\text{m}}\xspace}
+\newcommand{\micron}{\ensuremath{\,\mu\text{m}}\xspace}
+\newcommand{\cm}{\ensuremath{\,\text{cm}}\xspace}
+\newcommand{\mm}{\ensuremath{\,\text{mm}}\xspace}
+\newcommand{\mus}{\ensuremath{\,\mu\text{s}}\xspace}
+\newcommand{\keV}{\ensuremath{\,\text{ke\hspace{-.08em}V}}\xspace}
+\newcommand{\MeV}{\ensuremath{\,\text{Me\hspace{-.08em}V}}\xspace}
+\newcommand{\GeV}{\ensuremath{\,\text{Ge\hspace{-.08em}V}}\xspace}
+\newcommand{\TeV}{\ensuremath{\,\text{Te\hspace{-.08em}V}}\xspace}
+\newcommand{\PeV}{\ensuremath{\,\text{Pe\hspace{-.08em}V}}\xspace}
+\newcommand{\keVc}{\ensuremath{{\,\text{ke\hspace{-.08em}V\hspace{-0.16em}/\hspace{-0.08em}c}}}\xspace}
+\newcommand{\MeVc}{\ensuremath{{\,\text{Me\hspace{-.08em}V\hspace{-0.16em}/\hspace{-0.08em}c}}}\xspace}
+\newcommand{\GeVc}{\ensuremath{{\,\text{Ge\hspace{-.08em}V\hspace{-0.16em}/\hspace{-0.08em}c}}}\xspace}
+\newcommand{\TeVc}{\ensuremath{{\,\text{Te\hspace{-.08em}V\hspace{-0.16em}/\hspace{-0.08em}c}}}\xspace}
+\newcommand{\keVcc}{\ensuremath{{\,\text{ke\hspace{-.08em}V\hspace{-0.16em}/\hspace{-0.08em}c}^\text{2}}}\xspace}
+\newcommand{\MeVcc}{\ensuremath{{\,\text{Me\hspace{-.08em}V\hspace{-0.16em}/\hspace{-0.08em}c}^\text{2}}}\xspace}
+\newcommand{\GeVcc}{\ensuremath{{\,\text{Ge\hspace{-.08em}V\hspace{-0.16em}/\hspace{-0.08em}c}^\text{2}}}\xspace}
+\newcommand{\TeVcc}{\ensuremath{{\,\text{Te\hspace{-.08em}V\hspace{-0.16em}/\hspace{-0.08em}c}^\text{2}}}\xspace}
+
+\newcommand{\pbinv} {\mbox{\ensuremath{\,\text{pb}^\text{$-$1}}}\xspace}
+\newcommand{\fbinv} {\mbox{\ensuremath{\,\text{fb}^\text{$-$1}}}\xspace}
+\newcommand{\nbinv} {\mbox{\ensuremath{\,\text{nb}^\text{$-$1}}}\xspace}
+\newcommand{\ubinv} {\mbox{\ensuremath{\,\mu\text{b}^\text{$-$1}}}\xspace}
+\newcommand{\percms}{\ensuremath{\,\text{cm}^\text{$-$2}\,\text{s}^\text{$-$1}}\xspace}
+\newcommand{\lumi}{\ensuremath{\mathcal{L}}\xspace}
+\newcommand{\Lumi}{\ensuremath{\mathcal{L}}\xspace}%both upper and lower
+%
+% Need a convention here:
+\newcommand{\LvLow}  {\ensuremath{\mathcal{L}=\text{10}^\text{32}\,\text{cm}^\text{$-$2}\,\text{s}^\text{$-$1}}\xspace}
+\newcommand{\LLow}   {\ensuremath{\mathcal{L}=\text{10}^\text{33}\,\text{cm}^\text{$-$2}\,\text{s}^\text{$-$1}}\xspace}
+\newcommand{\lowlumi}{\ensuremath{\mathcal{L}=\text{2}\times \text{10}^\text{33}\,\text{cm}^\text{$-$2}\,\text{s}^\text{$-$1}}\xspace}
+\newcommand{\LMed}   {\ensuremath{\mathcal{L}=\text{2}\times \text{10}^\text{33}\,\text{cm}^\text{$-$2}\,\text{s}^\text{$-$1}}\xspace}
+\newcommand{\LHigh}  {\ensuremath{\mathcal{L}=\text{10}^\text{34}\,\text{cm}^\text{-2}\,\text{s}^\text{$-$1}}\xspace}
+\newcommand{\hilumi} {\ensuremath{\mathcal{L}=\text{10}^\text{34}\,\text{cm}^\text{-2}\,\text{s}^\text{$-$1}}\xspace}
+
+% Some usual physics terms
+
+\newcommand{\zp}{\ensuremath{\mathrm{Z}^\prime}\xspace}
+
+% SM (still to be classified)
+
+\newcommand{\kt}{\ensuremath{k_{\mathrm{T}}}\xspace}
+\newcommand{\BC}{\ensuremath{{B_{\mathrm{c}}}}\xspace}
+\newcommand{\bbarc}{\ensuremath{{\overline{b}c}}\xspace}
+\newcommand{\bbbar}{\ensuremath{{b\overline{b}}}\xspace}
+\newcommand{\ccbar}{\ensuremath{{c\overline{c}}}\xspace}
+\newcommand{\JPsi}{\ensuremath{{J}/\psi}\xspace}
+\newcommand{\bspsiphi}{\ensuremath{B_s \to \JPsi\, \phi}\xspace}
+%\newcommand{\ttbar}{\ensuremath{{t\overline{t}}}\xspace}
+\newcommand{\AFB}{\ensuremath{A_\mathrm{FB}}\xspace}
+\newcommand{\EE}{\ensuremath{e^+e^-}\xspace}
+\newcommand{\MM}{\ensuremath{\mu^+\mu^-}\xspace}
+\newcommand{\TT}{\ensuremath{\tau^+\tau^-}\xspace}
+\newcommand{\wangle}{\ensuremath{\sin^{2}\theta_{\mathrm{eff}}^\mathrm{lept}(M^2_\mathrm{Z})}\xspace}
+\newcommand{\ttbar}{\ensuremath{{t\overline{t}}}\xspace}
+\newcommand{\stat}{\ensuremath{\,\text{(stat.)}}\xspace}
+\newcommand{\syst}{\ensuremath{\,\text{(syst.)}}\xspace}
+% these moved to similar defs
+%\newcommand{\Etmiss}{\ensuremath{E_{\mathrm{T}\!{\rm miss}}}}
+%\newcommand{\VEtmiss}{\ensuremath{{\vec E}_{\mathrm{T}\!{\rm miss}}}}
+
+%%%  E-gamma definitions
+\newcommand{\HGG}{\ensuremath{\mathrm{H}\to\gamma\gamma}}
+\newcommand{\gev}{\GeV}
+\newcommand{\GAMJET}{\ensuremath{\gamma + \mathrm{jet}}}
+\newcommand{\PPTOJETS}{\ensuremath{\mathrm{pp}\to\mathrm{jets}}}
+\newcommand{\PPTOGG}{\ensuremath{\mathrm{pp}\to\gamma\gamma}}
+\newcommand{\PPTOGAMJET}{\ensuremath{\mathrm{pp}\to\gamma +
+\mathrm{jet}
+}}
+\newcommand{\MH}{\ensuremath{\mathrm{M_{\mathrm{H}}}}}
+\newcommand{\RNINE}{\ensuremath{\mathrm{R}_\mathrm{9}}}
+\newcommand{\DR}{\ensuremath{\Delta\mathrm{R}}}
+
+
+
+% Physics symbols ...
+
+\newcommand{\PT}{\ensuremath{p_{\mathrm{T}}}\xspace}
+\newcommand{\pt}{\ensuremath{p_{\mathrm{T}}}\xspace}
+\newcommand{\ET}{\ensuremath{E_{\mathrm{T}}}\xspace}
+\newcommand{\HT}{\ensuremath{H_{\mathrm{T}}}\xspace}
+\newcommand{\et}{\ensuremath{E_{\mathrm{T}}}\xspace}
+\newcommand{\Em}{\ensuremath{E\!\!\!/}\xspace}
+\newcommand{\Pm}{\ensuremath{p\!\!\!/}\xspace}
+\newcommand{\PTm}{\ensuremath{{p\!\!\!/}_{\mathrm{T}}}\xspace}
+\newcommand{\ETm}{\ensuremath{E_{\mathrm{T}}^{\mathrm{miss}}}\xspace}
+\newcommand{\MET}{\ensuremath{E_{\mathrm{T}}^{\mathrm{miss}}}\xspace}
+\newcommand{\ETmiss}{\ensuremath{E_{\mathrm{T}}^{\mathrm{miss}}}\xspace}
+\newcommand{\VEtmiss}{\ensuremath{{\vec E}_{\mathrm{T}}^{\mathrm{miss}}}\xspace}
+
+%%%%%%
+% From Albert
+%
+
+\newcommand{\ga}{\ensuremath{\gtrsim}}
+\newcommand{\la}{\ensuremath{\lesssim}}
+%\def\ga{\mathrel{\rlap{\raise.6ex\hbox{$>$}}{\lower.6ex\hbox{$\sim$}}}}
+%\def\la{\mathrel{\rlap{\raise.6ex\hbox{$<$}}{\lower.6ex\hbox{$\sim$}}}}
+%
+\newcommand{\swsq}{\ensuremath{\sin^2\theta_W}\xspace}
+\newcommand{\cwsq}{\ensuremath{\cos^2\theta_W}\xspace}
+\newcommand{\tanb}{\ensuremath{\tan\beta}\xspace}
+\newcommand{\tanbsq}{\ensuremath{\tan^{2}\beta}\xspace}
+\newcommand{\sidb}{\ensuremath{\sin 2\beta}\xspace}
+\newcommand{\alpS}{\ensuremath{\alpha_S}\xspace}
+\newcommand{\alpt}{\ensuremath{\tilde{\alpha}}\xspace}
+
+\newcommand{\QL}{\ensuremath{Q_L}\xspace}
+\newcommand{\sQ}{\ensuremath{\tilde{Q}}\xspace}
+\newcommand{\sQL}{\ensuremath{\tilde{Q}_L}\xspace}
+\newcommand{\ULC}{\ensuremath{U_L^C}\xspace}
+\newcommand{\sUC}{\ensuremath{\tilde{U}^C}\xspace}
+\newcommand{\sULC}{\ensuremath{\tilde{U}_L^C}\xspace}
+\newcommand{\DLC}{\ensuremath{D_L^C}\xspace}
+\newcommand{\sDC}{\ensuremath{\tilde{D}^C}\xspace}
+\newcommand{\sDLC}{\ensuremath{\tilde{D}_L^C}\xspace}
+\newcommand{\LL}{\ensuremath{L_L}\xspace}
+\newcommand{\sL}{\ensuremath{\tilde{L}}\xspace}
+\newcommand{\sLL}{\ensuremath{\tilde{L}_L}\xspace}
+\newcommand{\ELC}{\ensuremath{E_L^C}\xspace}
+\newcommand{\sEC}{\ensuremath{\tilde{E}^C}\xspace}
+\newcommand{\sELC}{\ensuremath{\tilde{E}_L^C}\xspace}
+\newcommand{\sEL}{\ensuremath{\tilde{E}_L}\xspace}
+\newcommand{\sER}{\ensuremath{\tilde{E}_R}\xspace}
+\newcommand{\sFer}{\ensuremath{\tilde{f}}\xspace}
+\newcommand{\sQua}{\ensuremath{\tilde{q}}\xspace}
+\newcommand{\sUp}{\ensuremath{\tilde{u}}\xspace}
+\newcommand{\suL}{\ensuremath{\tilde{u}_L}\xspace}
+\newcommand{\suR}{\ensuremath{\tilde{u}_R}\xspace}
+\newcommand{\sDw}{\ensuremath{\tilde{d}}\xspace}
+\newcommand{\sdL}{\ensuremath{\tilde{d}_L}\xspace}
+\newcommand{\sdR}{\ensuremath{\tilde{d}_R}\xspace}
+\newcommand{\sTop}{\ensuremath{\tilde{t}}\xspace}
+\newcommand{\stL}{\ensuremath{\tilde{t}_L}\xspace}
+\newcommand{\stR}{\ensuremath{\tilde{t}_R}\xspace}
+\newcommand{\stone}{\ensuremath{\tilde{t}_1}\xspace}
+\newcommand{\sttwo}{\ensuremath{\tilde{t}_2}\xspace}
+\newcommand{\sBot}{\ensuremath{\tilde{b}}\xspace}
+\newcommand{\sbL}{\ensuremath{\tilde{b}_L}\xspace}
+\newcommand{\sbR}{\ensuremath{\tilde{b}_R}\xspace}
+\newcommand{\sbone}{\ensuremath{\tilde{b}_1}\xspace}
+\newcommand{\sbtwo}{\ensuremath{\tilde{b}_2}\xspace}
+\newcommand{\sLep}{\ensuremath{\tilde{l}}\xspace}
+\newcommand{\sLepC}{\ensuremath{\tilde{l}^C}\xspace}
+\newcommand{\sEl}{\ensuremath{\tilde{e}}\xspace}
+\newcommand{\sElC}{\ensuremath{\tilde{e}^C}\xspace}
+\newcommand{\seL}{\ensuremath{\tilde{e}_L}\xspace}
+\newcommand{\seR}{\ensuremath{\tilde{e}_R}\xspace}
+\newcommand{\snL}{\ensuremath{\tilde{\nu}_L}\xspace}
+\newcommand{\sMu}{\ensuremath{\tilde{\mu}}\xspace}
+\newcommand{\sNu}{\ensuremath{\tilde{\nu}}\xspace}
+\newcommand{\sTau}{\ensuremath{\tilde{\tau}}\xspace}
+\newcommand{\Glu}{\ensuremath{g}\xspace}
+\newcommand{\sGlu}{\ensuremath{\tilde{g}}\xspace}
+\newcommand{\Wpm}{\ensuremath{W^{\pm}}\xspace}
+\newcommand{\sWpm}{\ensuremath{\tilde{W}^{\pm}}\xspace}
+\newcommand{\Wz}{\ensuremath{W^{0}}\xspace}
+\newcommand{\sWz}{\ensuremath{\tilde{W}^{0}}\xspace}
+\newcommand{\sWino}{\ensuremath{\tilde{W}}\xspace}
+\newcommand{\Bz}{\ensuremath{B^{0}}\xspace}
+\newcommand{\sBz}{\ensuremath{\tilde{B}^{0}}\xspace}
+\newcommand{\sBino}{\ensuremath{\tilde{B}}\xspace}
+\newcommand{\Zz}{\ensuremath{Z^{0}}\xspace}
+\newcommand{\sZino}{\ensuremath{\tilde{Z}^{0}}\xspace}
+\newcommand{\sGam}{\ensuremath{\tilde{\gamma}}\xspace}
+\newcommand{\chiz}{\ensuremath{\tilde{\chi}^{0}}\xspace}
+\newcommand{\chip}{\ensuremath{\tilde{\chi}^{+}}\xspace}
+\newcommand{\chim}{\ensuremath{\tilde{\chi}^{-}}\xspace}
+\newcommand{\chipm}{\ensuremath{\tilde{\chi}^{\pm}}\xspace}
+\newcommand{\Hone}{\ensuremath{H_{d}}\xspace}
+\newcommand{\sHone}{\ensuremath{\tilde{H}_{d}}\xspace}
+\newcommand{\Htwo}{\ensuremath{H_{u}}\xspace}
+\newcommand{\sHtwo}{\ensuremath{\tilde{H}_{u}}\xspace}
+\newcommand{\sHig}{\ensuremath{\tilde{H}}\xspace}
+\newcommand{\sHa}{\ensuremath{\tilde{H}_{a}}\xspace}
+\newcommand{\sHb}{\ensuremath{\tilde{H}_{b}}\xspace}
+\newcommand{\sHpm}{\ensuremath{\tilde{H}^{\pm}}\xspace}
+\newcommand{\hz}{\ensuremath{h^{0}}\xspace}
+\newcommand{\Hz}{\ensuremath{H^{0}}\xspace}
+\newcommand{\Az}{\ensuremath{A^{0}}\xspace}
+\newcommand{\Hpm}{\ensuremath{H^{\pm}}\xspace}
+\newcommand{\sGra}{\ensuremath{\tilde{G}}\xspace}
+%
+\newcommand{\mtil}{\ensuremath{\tilde{m}}\xspace}
+%
+\newcommand{\rpv}{\ensuremath{\rlap{\kern.2em/}R}\xspace}
+\newcommand{\LLE}{\ensuremath{LL\bar{E}}\xspace}
+\newcommand{\LQD}{\ensuremath{LQ\bar{D}}\xspace}
+\newcommand{\UDD}{\ensuremath{\overline{UDD}}\xspace}
+\newcommand{\Lam}{\ensuremath{\lambda}\xspace}
+\newcommand{\Lamp}{\ensuremath{\lambda'}\xspace}
+\newcommand{\Lampp}{\ensuremath{\lambda''}\xspace}
+%
+\newcommand{\spinbd}[2]{\ensuremath{\bar{#1}_{\dot{#2}}}\xspace}
+
+\newcommand{\MD}{\ensuremath{{M_\mathrm{D}}}\xspace}% ED mass
+\newcommand{\Mpl}{\ensuremath{{M_\mathrm{Pl}}}\xspace}% Planck mass
+\newcommand{\Rinv} {\ensuremath{{R}^{-1}}\xspace}
+
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%
+% Hyphenations (only need to add here if you get a nasty word break)
+%
+\hyphenation{en-viron-men-tal}%    just an example

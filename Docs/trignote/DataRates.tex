@@ -1,0 +1,218 @@
+\section{Trigger rate predictions from data}
+
+One important constraint on trigger definitions is the estimated rate they pass events.  In this
+section this is attempted by looking prospective triggers selected from 2010 data, which was 
+typically produced with looser triggers than would be needed for 2011.  
+
+\subsection{Trigger descriptions and working points}
+
+In this note we are targetting three quantities by which to trigger -- photon transverse momentum, 
+$H_T$:
+
+\begin{equation}
+H_T = \sum_{\mathrm{jets} > \mathrm{thresh}} p_T,
+\end{equation}
+
+or the scalar sum of jet transverse momentum and missing $H_T$ or $\cancel{H}_T$:
+
+\begin{equation}
+\cancel{H}_T = \left| -\sum_{\mathrm{jets} > \mathrm{thresh}} \vec{p}_T \right|,
+\end{equation}
+
+which is the vector sum.  Both $H_T$ and $\cancel{H}_T$ are sums for jets above a threshold in $p_T$.  
+The thresholds can have the effect of reducing the
+effects of beam halo or pile-up.
+Initially the threshold for $H_T$ was an uncorrected jet $p_T$ of 20 GeV, and for $\cancel{H}_T$ was 
+uncorrected jet $p_T$ of 30 GeV.   As trigger studies progressed and the HLT moved from uncorrected jets
+to corrected jets these thresholds evolved to a corrected jet $p_T$ of 40 GeV for $H_T$ and 30 GeV for 
+$\cancel{H}_T$.
+
+Photon triggers are defined within a series of "working points" applying different degrees of 
+isolation requirements, shown in tables \ref{tab:workingpoints} and \ref{tab:trackandisoworkingpoints}.
+Track isolation and the global isolation working points in table \ref{tab:trackandisoworkingpoints}
+were not considered here because track isolation is one of the criteria defining "fake" photons
+which are expected to be used for background measurements (ref).
+
+\begin{table}
+\begin{center}
+\begin{tabular}{|lcc|}\hline
+Working Point & "CaloId" & "CaloIso" \\ \hline \hline
+Very Loose (VL) &  $H/E < 0.15 (0.10)$  & ecalIso/$E_T < 0.2 (0.2)$  \\
+                &  $\sigma_{i\eta i\eta} < 0.024 (0.040) $ & hcalIso/$E_T < 0.2 (0.2) $ \\ \hline
+Loose (L)       &  $H/E < 0.15 (0.10)$  & ecalIso/$E_T < 0.2 (0.2) $ \\
+                &  $\sigma_{i\eta i\eta} < 0.014 (0.035)$  & hcalIso/$E_T < 0.2 (0.2) $ \\ \hline
+Tight (T)       &  $H/E < 0.10 (0.075) $ & ecalIso/$E_T < 0.125 (0.125)$  \\
+                &  $\sigma_{i\eta i\eta} < 0.011 (0.031) $ & hcalIso/$E_T < 0.125 (0.075) $ \\ \hline
+Very Tight (VT) &  $H/E < 0.05 (0.05)$  & ecalIso/$E_T < 0.125 (0.125) $  \\
+                &  $\sigma_{i\eta i\eta} < 0.011 (0.031) $ & hcalIso/$E_T < 0.125 (0.075) $  \\ \hline 
+\end{tabular}
+\end{center}
+\caption{Egamma calo ID and isolation operating points, given for the barrel and endcap in parentheses.}
+\label{tab:workingpoints}
+\end{table}
+
+
+\begin{table}
+\begin{center}
+\begin{tabular}{|lccc|}\hline
+Working Point & "TrkId" & "TrkIso"  & "Iso" \\ \hline \hline
+                 &                       &   & Ecal $E_T < 6.0 + 0.012E_T$  \\
+Very Loose (VL)  & $d\eta < 0.01 (0.01)$ & trkIso/$E_T < 0.2 (0.2)$ & Hcal $E_T < 4.0 + 0.005E_T$\\
+                 & $d\phi < 0.15 (0.10)$ &  &trk $p_T < 4.0 + 0.002E_T$\\ \hline
+                 &                        &               & Ecal $E_T < 5.5 + 0.012E_T$\\
+Loose (L) & $d\eta < 0.01 (0.01)$ & trkIso/$E_T < 0.2 (0.2)$& Hcal $E_T < 3.5 + 0.005E_T$\\
+                & $d\phi < 0.15 (0.10)$ & & trk $p_T < 3.5 + 0.002E_T$\\ \hline
+                                 &                 &                &  Ecal $E_T < 5.0 + 0.012E_T$\\
+Tight (T) & $d\eta < 0.008 (0.008) $& trkIso/$E_T < 0.125 (0.075)$& Hcal $E_T < 3.0 + 0.005E_T$\\
+                & $d\phi < 0.07 (0.05)$ & &trk $p_T < 3.0 + 0.002E_T$\\ \hline
+                 &                 &              &    \\
+Very Tight (VT) & $d\eta < 0.008 (0.008)$ & trkIso/$E_T < 0.125 (0.075)$&  - \\
+                & $d\phi < 0.07 (0.05) $& &\\ \hline 
+\end{tabular}
+\end{center}
+\caption{Egamma tracker trigger operating points, given for the barrel and endcap in parentheses.  The "Iso"
+column refers to global isolation working points, in the trigger path: "IsoVL", "IsoL", and "IsoT" respectively.}
+\label{tab:trackandisoworkingpoints}
+\end{table}
+
+
+\subsection{Rates from 2010 Data} 
+
+Trigger rates for proposed dual object triggers were estimated from data in runs (list) and scaled 
+to an instantaneous luminosity of $5\times10^32 cm^{-2}/s$.  
+
+
+
+\begin{table}
+\begin{table}
+\begin{center}
+\begin{tabular}{|l|ccccccc|}\hline
+    & 20 & 22 & 24 & 26 & 28 & 30 & 32 \\ \hline \hline
+20 & 37 & 36 & 32 & 29 & 26 & 23 & 21 \\
+22 &    & 29 & 27 & 25 & 22 & 20 & 18 \\
+24 &    &    & 21 & 19 & 18 & 16 & 15 \\
+26 &    &    &    & 15 & 14 & 13 & \bf{12} \\
+28 &    &    &    &    & 11 & 11 & 10 \\
+30 &    &    &    &    &    & 8  & 8  \\
+32 &    &    &    &    &    &    & \bf{6}  \\
+\end{tabular}
+\end{center}
+\caption{Diphoton trigger rates at 5e32 with some kind of isolation}
+\end{table}
+
+
+
+\begin{table}
+\begin{center}
+\begin{tabular}{|l|cccc|}\hline
+                                & CaloIdVL & CaloIdL & CaloIDVL\_CaloIsolVL & CaloIDL\_CaloIsoVL \\ \hline
+Photon28 + Photon26             &      1.5              &        0.6              &       0.7          &  0.4 \\
+Photon32 + Photon26             &      11.5              &       4.9               &      5.3          &  2.7 \\         
+Photon32 + Photon32             &      5.8              &        2.6              &       3.1         &  1.6 \\
+Photon60 + HT200                &      2.0              &       1.5               &       1.8         &  1.4 \\
+Photon70 + HT200                &      11.2              &       8.0               &      10.4        &  7.6   \\
+Photon70 + HT300                &      4.6              &        3.1              &       4.1         & 2.9  \\
+Photon70 + MHT30                &      9.0              &       6.3               &      8.5          & 6.1  \\
+Photon70 + MHT50                &      4.7              &       3.1               &      4.5          & 3.0  \\ \hline
+\end{tabular}
+\end{center}
+\caption{Effect of different photon working points on the various types of trigger's rates}
+\end{table}
+
+\begin{table}
+\begin{center}
+\begin{tabular}{|l|ccccc|}\hline
+         & HT200 & HT300 & HT400 & HT500 & HT600 \\ \hline \hline
+70\_CaloIDL & 8.5 & 3.1 & 0.8 & 0.3 & 0.1 \\
+80\_CaloIDL & 5.5 & 2.4 & 0.7 & 0.3 & 0.1 \\
+90\_CaloIDL & 3.2 & 1.8 & 0.6 & 0.2 & 0.1 \\
+100\_CaloIDL & 2.3 & 1.4 & 0.6 & 0.2 & 0.1 \\ \hline
+70\_CaloIDL\_CaloIsoT & 6.6 & 2.1 & 0.5 & 0.2 & 0.1 \\
+80\_CaloIDL\_CaloIsoT & 4.3 & 1.6 & 0.4 & 0.2 & 0.1 \\
+90\_CaloIDL\_CaloIsoT & 2.7 & 1.4 & 0.4 & 0.2 & 0.1 \\
+100\_CaloIDL\_CaloIsoT & 2.0 & 1.2 & 0.4 & 0.2 & 0.1 \\ \hline
+\end{tabular}
+\end{center}
+\caption{Photon+$H_T$ trigger rates}
+\end{table}
+
+
+\begin{table}
+\begin{center}
+\begin{tabular}{|l|ccccccc|}\hline
+         & MHT30 & MHT40 & MHT50 & MHT60 & MHT70 & MHT80 & MHT90 \\ \hline \hline
+70\_CaloIDL & 7.4 & 5.3 & 3.8 & 2.5 & 1.9 & 1.4 & 1.3  \\
+80\_CaloIDL & 4.2 & 3.1 & 2.3 & 1.6 & 1.1 & 0.8 & 0.7 \\
+90\_CaloIDL & 2.3 & 1.8 & 1.3 & 0.9 & 0.7 & 0.6 & 0.5 \\
+100\_CaloIDL & 1.6 & 1.1 & 1.0 & 0.7 & 0.5 & 0.4 & 0.3 \\ \hline
+70\_CaloIDL\_CaloIsoT & 6.2 & 4.4 & 3.2 & 2.2 & 1.7 & 1.3 & 1.2 \\
+80\_CaloIDL\_CaloIsoT & 3.4 & 2.4 & 1.9 & 1.3 & 1.0 & 0.7 & 0.7 \\
+90\_CaloIDL\_CaloIsoT & 2.0 & 1.4 & 1.1 & 0.8 & 0.6 & 0.5 & 0.4 \\
+100\_CaloIDL\_CaloIsoT & 1.5 & 1.0 & 0.9 & 0.6 & 0.4 & 0.4 & 0.3 \\ \hline
+\end{tabular}
+\end{center}
+\caption{Photon+$\cancel{H}_T$ trigger rates}
+\end{table}
+
+
+\begin{table}
+\begin{center}
+\begin{tabular}{|l|ccccccccccccccccc|}\hline 
+   & 32 & 34 & 36 & 38 & 40 & 42 & 44 & 46 & 48 & 50 & 52 & 54 & 56 & 58 & 60 & 62 & 64 \\ \hline
+26 &  4.7  &    &    &    &    &    &    &    &    &    &    &    &    &    &    &    &   \\   
+28 &  3.6  & 3.4   &    &    &    &    &    &    &    &    &    &    &    &    &    &    &   \\   
+30 & 3.1   & 2.9   & 2.6   &    &    &    &    &    &    &    &    &    &    &    &    &    &   \\
+32 &  2.3  & 2.3   & 2.2   &  1.9  &   &    &    &    &    &    &    &    &    &    &    &    &   \\
+34 &    & 1.8   & 1.8   & 1.6   & 1.6   &    &    &    &    &    &    &    &    &    &    &    &   \\
+36 &    &    & 1.6   & 1.5   & 1.4   & 1.4   &    &    &    &    &    &    &    &    &    &    &   \\
+38 &    &    &    & 1.2   &  1.2  & 1.2   &  1.2  &    &    &    &    &    &    &    &    &    &   \\
+40 &    &    &    &    & 1.0   &  1.0  & 1.0   & 1.0   &    &    &    &    &    &    &    &    &   \\
+42 &    &    &    &    &    & 0.9   & 0.9   & 0.8   & 0.8   &    &    &    &    &    &    &    &   \\
+44 &    &    &    &    &    &    & 0.8   & 0.7   & 0.6   &  0.6  &    &    &    &    &    &    &    \\
+46 &    &    &    &    &    &    &    & 0.6   & 0.6   & 0.5   & 0.5   &    &    &    &    &    &   \\
+48 &    &    &    &    &    &    &    &    & 0.5   & 0.5   & 0.4   & 0.4   &    &    &    &    &    \\
+50 &    &    &    &    &    &    &    &    &    & 0.4   & 0.4   & 0.4   & 0.4   &    &    &    &   \\
+52 &    &    &    &    &    &    &    &    &    &    & 0.4   & 0.4   & 0.4   & 0.4   &    &    &   \\
+54 &    &    &    &    &    &    &    &    &    &    &    & 0.3   & 0.3   & 0.3   & 0.3   &    &    \\
+56 &    &    &    &    &    &    &    &    &    &    &    &    & 0.3   & 0.3   & 0.3   &  0.3  &   \\
+58 &    &    &    &    &    &    &    &    &    &    &    &    &    & 0.3   & 0.3   & 0.3   & 0.3  \\
+60 &    &    &    &    &    &    &    &    &    &    &    &    &    &    & 0.3   & 0.3   & 0.3  \\
+62 &    &    &    &    &    &    &    &    &    &    &    &    &    &    &    & 0.3   &  0.3 \\
+64 &    &    &    &    &    &    &    &    &    &    &    &    &    &    &    &    &  0.3  \\ \hline
+\end{tabular}
+\end{center}
+\caption{Photon"X"CaloIdLPhoton"Y"CaloIdL trigger rate estimates in Hz for 5e32.  The horizontal direction is 
+the threshold applied to the leading photon, vertical descending direction is the threshold
+applied to the trailing photon.  "CaloIdL" refers to the "Loose" cuts shown in table \ref{tab:workingpoints}}
+\end{table}
+
+
+
+
+
+\begin{table}
+\begin{center}
+\begin{tabular}{|l|ccccc|}\hline
+         & HT200 & HT300 & HT400 & HT500 & HT600 \\ \hline \hline
+70\_CaloIDL & 8.2 & 2.8 & 0.7 & 0.3 & 0.1  \\
+80\_CaloIDL & 5.4 & 2.2 & 0.6 & 0.2 & 0.1 \\
+90\_CaloIDL & 3.2 & 1.7 & 0.5 & 0.2 & 0.1 \\
+100\_CaloIDL & 2.3 & 1.4 & 0.5 & 0.2 & 0.1 \\ \hline
+\end{tabular}
+\end{center}
+\caption{Photon+$H_T$ trigger rates with a 40 GeV requirement on jets entering the $H_T$ sum.}
+\end{table}
+
+
+\begin{table}
+\begin{center}
+\begin{tabular}{|l|ccccccc|}\hline
+         & MHT30 & MHT40 & MHT50 & MHT60 & MHT70 & MHT80 & MHT90 \\ \hline \hline
+70\_CaloIDL  &  7.8 & 6.0 & 4.8 & 3.5 & 2.6 & 2.0 & 1.7 \\
+80\_CaloIDL&  4.5 & 3.5 & 2.7 & 2.0 & 1.4 & 1.0& 0.9 \\
+90\_CaloIDL & 2.6 & 2.0 & 1.6 & 1.2 & 0.8 & 0.7 & 0.5\\
+100\_CaloIDL&  1.8 & 1.4 & 1.1& 0.8 & 0.6 & 0.5 & 0.4  \\ \hline
+\end{tabular}
+\end{center}
+\caption{Photon+$\cancel{H}_T$ trigger rates}
+\end{table}
