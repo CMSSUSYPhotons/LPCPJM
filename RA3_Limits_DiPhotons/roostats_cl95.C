@@ -1,7 +1,7 @@
 static const char* desc =
 "=====================================================================\n"
 "|                                                                    \n"
-"|\033[1m        roostats_cl95.C  version 1.15                 \033[0m\n"
+"|\033[1m        roostats_cl95.C  version 1.10                 \033[0m\n"
 "|                                                                    \n"
 "| Standard c++ routine for 95% C.L. limit calculation                \n"
 "| for cross section in a 'counting experiment'                       \n"
@@ -11,19 +11,17 @@ static const char* desc =
 "|                                                                    \n"
 "|\033[1m Gena Kukartsev, Stefan Schmitz, Gregory Schott       \033[0m\n"
 "|\033[1m Lorenzo Moneta (CLs core)                            \033[0m\n"
-"|\033[1m Michael Segala (Feldman-Cousins)                     \033[0m\n"
 "|                                                                    \n"
 "| July  2010: first version                                          \n"
 "| March 2011: restructuring, interface change, expected limits       \n"
 "| May 2011:   added expected limit median,                           \n"
 "|             68%, 95% quantile bands and actual coverage            \n"
 "| July 2011:  added CLs observed and expected limits                 \n"
-"|             added option to run using Feldman Cousins              \n"
 "|                                                                    \n"
 "=====================================================================\n"
 "                                                                     \n"
 "Prerequisites:                                                       \n"
-"                ROOT version 5.30.00 or higher                       \n"
+"                ROOT version 5.27/06 or higher                       \n"
 "                                                                     \n"
 "                                                                     \n"
 "                                                                     \n"
@@ -37,14 +35,6 @@ static const char* desc =
 " Double_t             limit = roostats_cl95(ilum, slum, eff, seff, bck, sbck, n, gauss = false, nuisanceModel, method, plotFileName, seed); \n"
 " LimitResult expected_limit = roostats_clm(ilum, slum, eff, seff, bck, sbck, ntoys, nuisanceModel, method, seed); \n"
 " Double_t     average_limit = roostats_cla(ilum, slum, eff, seff, bck, sbck, nuisanceModel, method, seed); \n"
-"                                                                     \n"
-" LimitResult limit = roostats_limit(ilum, slum, eff, seff, bck, sbck, n, gauss = false, nuisanceModel, method, plotFileName, seed); \n"
-" Double_t obs_limit = limit.GetObservedLimit();                      \n"
-" Double_t exp_limit = limit.GetExpectedLimit();                      \n"
-" Double_t exp_up    = limit.GetOneSigmaHighRange();                  \n"
-" Double_t exp_down  = limit.GetOneSigmaLowRange();                   \n"
-" Double_t exp_2up   = limit.GetTwoSigmaHighRange();                  \n"
-" Double_t exp_2down = limit.GetTwoSigmaLowRange();                   \n"
 "                                                                     \n"
 "Inputs:                                                              \n"
 "       ilum          - Nominal integrated luminosity (pb^-1)         \n"
@@ -70,16 +60,7 @@ static const char* desc =
 "                       (automatically 0 when gauss == true)          \n"
 "       method        - method of statistical inference:              \n"
 "                       \"bayesian\"  - Bayesian with numeric         \n"
-"                                       integration (default),        \n"
-"                       \"mcmc\"      - another implementation of     \n"
-"                                       Bayesian, not optimized,      \n"
-"                                       to be used for cross checks   \n"
-"                                       only!                         \n"
-"                       \"cls\"       - CLs observed limit. We suggest\n"
-"                                       using the dedicated interface \n"
-"                                       roostats_cls() instead        \n"
-"                       \"fc\"        - Feldman Cousins with numeric  \n"
-"                                     integration,                    \n"
+"                                     integration (default),          \n"
 "                       \"workspace\" - only create workspace and save\n"
 "                                     to file, no interval calculation\n"
 "       plotFileName  - file name for the control plot to be created  \n"
@@ -138,9 +119,6 @@ static const char* desc =
 #include "RooStats/MCMCCalculator.h"
 #include "RooStats/MCMCInterval.h"
 #include "RooStats/MCMCIntervalPlot.h"
-#include "RooStats/FeldmanCousins.h"
-#include "RooStats/PointSetInterval.h"
-#include "RooStats/ConfidenceBelt.h"
 #include "RooStats/ProposalHelper.h"
 #include "RooStats/HybridCalculator.h"
 #include "RooStats/FrequentistCalculator.h"
@@ -208,7 +186,7 @@ public:
     _low95(0),
     _high95(0),
     _cover68(0),
-    _cover95(0){};
+    _cover95(0){}
 
   // copy constructor
   LimitResult(const LimitResult & other):
@@ -222,19 +200,19 @@ public:
     _cover68(other._cover68),
     _cover95(other._cover95){}
 
-  ~LimitResult(){};
+  ~LimitResult(){}
 
-  Double_t GetObservedLimit(){return _observed_limit;};
-  Double_t GetObservedLimitError(){return _observed_limit_error;};
-  Double_t GetExpectedLimit(){return _expected_limit;};
+  Double_t GetObservedLimit(){return _observed_limit;}
+  Double_t GetObservedLimitError(){return _observed_limit_error;}
+  Double_t GetExpectedLimit(){return _expected_limit;}
 
-  Double_t GetOneSigmaLowRange(){return _low68;};
-  Double_t GetOneSigmaHighRange(){return _high68;};
-  Double_t GetOneSigmaCoverage(){return _cover68;};
+  Double_t GetOneSigmaLowRange(){return _low68;}
+  Double_t GetOneSigmaHighRange(){return _high68;}
+  Double_t GetOneSigmaCoverage(){return _cover68;}
 
-  Double_t GetTwoSigmaLowRange(){return _low95;};
-  Double_t GetTwoSigmaHighRange(){return _high95;};
-  Double_t GetTwoSigmaCoverage(){return _cover95;};
+  Double_t GetTwoSigmaLowRange(){return _low95;}
+  Double_t GetTwoSigmaHighRange(){return _high95;}
+  Double_t GetTwoSigmaCoverage(){return _cover95;}
 
 private:
   Double_t _observed_limit;
@@ -282,8 +260,6 @@ public:
   int makePlot( std::string method,
 		std::string plotFileName = "plot_cl95.pdf" );
 
-  Double_t FC_calc(int Nbins, float conf_int, float ULprecision, bool UseAdaptiveSampling = true, bool CreateConfidenceBelt = true);
-
 private:
 
   void init( UInt_t seed ); //  to be called by constructor
@@ -313,15 +289,8 @@ private:
   double nbkg_rel_err;
   Int_t _nuisance_model;
 
-  // attributes
-  bool hasSigErr;
-  bool hasBgErr;
-
   // for Bayesian MCMC calculation
   MCMCInterval * mcInt;
-  
-  // for Feldman-Cousins Calculator
-  FeldmanCousins * fcCalc;
 
   // random numbers
   TRandom3 r;
@@ -372,7 +341,6 @@ void CL95Calc::init(UInt_t seed){
   sInt = 0;
   bcalc = 0;
   mcInt = 0;
-  fcCalc = 0;
   SbModel.SetName("SbModel");
   SbModel.SetTitle("ModelConfig for roostats_cl95");
 
@@ -403,10 +371,6 @@ void CL95Calc::init(UInt_t seed){
 
   // default Gaussian nuisance model
   _nuisance_model = 0;
-
-  // set default attributes
-  hasSigErr = false;
-  hasBgErr = false;
 }
 
 
@@ -416,7 +380,6 @@ CL95Calc::~CL95Calc(){
   delete sInt;
   delete bcalc;
   delete mcInt;
-  delete fcCalc;
 }
 
 
@@ -429,7 +392,6 @@ RooWorkspace * CL95Calc::makeWorkspace(Double_t ilum, Double_t slum,
   if ( bck>0.0 && (sbck/bck)<5.0 ){
     // check that bck is not too close to zero,
     // so lognormal and gamma modls still make sense
-    std::cout << "[CL95Calc]: checking background expectation and its uncertainty - ok" << std::endl;
     _nuisance_model = nuisanceModel;
   }
   else{
@@ -465,8 +427,7 @@ RooWorkspace * CL95Calc::makeWorkspace(Double_t ilum, Double_t slum,
   ws->factory( "prod::nsig(lumi,xsec,efficiency, nsig_nuis)" );
 
   // estimated background yield
-  ws->factory( "bkg_est[1.0]" );
-  ws->factory( "lbkg_est[0]" ); // for special case of lognormal prior
+  ws->factory( "bkg_est[0]" );
 
   // nuisance parameter: factor 1 with background relative uncertainty
   //ws->factory( "nbkg_nuis[1.0]" ); // will adjust range below
@@ -478,12 +439,10 @@ RooWorkspace * CL95Calc::makeWorkspace(Double_t ilum, Double_t slum,
   ws->factory("sum::yield(nsig,nbkg)");
   if (gauss){
     // Poisson probability with mean signal+bkg
-    std::cout << "[CL95Calc]: creating Gaussian probability as core model..." << std::endl;
     ws->factory( "Gaussian::model_core(n,yield,expr('sqrt(yield)',yield))" );
   }
   else{
     // Poisson probability with mean signal+bkg
-    std::cout << "[CL95Calc]: creating Poisson probability as core model..." << std::endl;
     ws->factory( "Poisson::model_core(n,yield)" );
   }
 
@@ -491,9 +450,6 @@ RooWorkspace * CL95Calc::makeWorkspace(Double_t ilum, Double_t slum,
   // systematic uncertainties
   nsig_rel_err = sqrt(slum*slum/ilum/ilum+seff*seff/eff/eff);
   nbkg_rel_err = sbck/bck;
-  if (nsig_rel_err > 1.0e-10) hasSigErr = true;
-  if (nbkg_rel_err > 1.0e-10) hasBgErr = true;
-
   if (_nuisance_model == 0){ // gaussian model for nuisance parameters
 
     std::cout << "[roostats_cl95]: Gaussian PDFs for nuisance parameters" << endl;
@@ -501,20 +457,10 @@ RooWorkspace * CL95Calc::makeWorkspace(Double_t ilum, Double_t slum,
     // cumulative signal uncertainty
     ws->factory( "nsig_sigma[0.1]" );
     ws->factory( "nsig_global[1.0,0.1,10.0]" ); // mean of the nsig nuisance par
-    if (hasSigErr){
-      // non-zero overall signal sensitivity systematics: need to create
-      // the corresponding constraint term for the likelihood
-      std::cout << "[roostats_cl95]: non-zero systematics on overall signal sensitivity, creating constraint term" << endl;
-      ws->factory( "Gaussian::syst_nsig(nsig_nuis, nsig_global, nsig_sigma)" );
-    }
+    ws->factory( "Gaussian::syst_nsig(nsig_nuis, nsig_global, nsig_sigma)" );
     // background uncertainty
     ws->factory( "nbkg_sigma[0.1]" );
-    if (hasBgErr){
-      // non-zero background systematics: need to create
-      // the corresponding constraint term for the likelihood
-      std::cout << "[roostats_cl95]: non-zero background systematics, creating constraint term" << endl;
-      ws->factory( "Gaussian::syst_nbkg(nbkg, bkg_est, nbkg_sigma)" );
-    }
+    ws->factory( "Gaussian::syst_nbkg(nbkg, bkg_est, nbkg_sigma)" );
 
     ws->var("nsig_sigma")->setVal(nsig_rel_err);
     ws->var("nbkg_sigma")->setVal(sbck);
@@ -523,71 +469,22 @@ RooWorkspace * CL95Calc::makeWorkspace(Double_t ilum, Double_t slum,
     ws->var("nbkg_sigma")->setConstant(kTRUE);
   }
   else if (_nuisance_model == 1){// Lognormal model for nuisance parameters
-    // this is the "old" implementation of the lognormal model, better use
-    // the new one, nuisance_model=3
 
     std::cout << "[roostats_cl95]: Lognormal PDFs for nuisance parameters" << endl;
 
     // cumulative signal uncertainty
     ws->factory( "nsig_kappa[1.1]" );
     ws->factory( "nsig_global[1.0,0.1,10.0]" ); // mean of the nsig nuisance par
-
-    if (hasSigErr){
-      // non-zero overall signal sensitivity systematics: need to create
-      // the corresponding constraint term for the likelihood
-      std::cout << "[roostats_cl95]: non-zero systematics on overall signal sensitivity, creating constraint term" << endl;
-      ws->factory( "Lognormal::syst_nsig(nsig_nuis, nsig_global, nsig_kappa)" );
-    }
-
+    ws->factory( "Lognormal::syst_nsig(nsig_nuis, nsig_global, nsig_kappa)" );
     // background uncertainty
     ws->factory( "nbkg_kappa[1.1]" );
-    if (hasBgErr){
-      // non-zero background systematics: need to create
-      // the corresponding constraint term for the likelihood
-      std::cout << "[roostats_cl95]: non-zero background systematics, creating constraint term" << endl;
-      ws->factory( "Lognormal::syst_nbkg(nbkg, bkg_est, nbkg_kappa)" );
-    }
+    ws->factory( "Lognormal::syst_nbkg(nbkg, bkg_est, nbkg_kappa)" );
 
     ws->var("nsig_kappa")->setVal(1.0 + nsig_rel_err);
     ws->var("nbkg_kappa")->setVal(1.0 + nbkg_rel_err);
     ws->var("nsig_global")->setConstant(kTRUE);
     ws->var("nsig_kappa")->setConstant(kTRUE);
     ws->var("nbkg_kappa")->setConstant(kTRUE);
-  }
-  else if (_nuisance_model == 3){
-    //
-    // Lognormal nuisance model implemented as Gaussian of
-    // a log of the parameter. The corresponding global observable
-    // is the log of the estimate for the parameter.
-    //
-
-    std::cout << "[roostats_cl95]: Lognormal PDFs for nuisance parameters" << endl;
-
-    // cumulative signal uncertainty
-    ws->factory( "lnsig_sigma[0.1]" );
-    ws->factory( "nsig_global[0.0,-0.5,0.5]" ); // log of mean of the nsig nuisance par
-    //ws->factory( "Gaussian::syst_nsig(cexpr::lnsig('log(nsig_nuis)', nsig_nuis), nsig_global, lnsig_sigma)" );
-    if (hasSigErr){
-      // non-zero overall signal sensitivity systematics: need to create
-      // the corresponding constraint term for the likelihood
-      std::cout << "[roostats_cl95]: non-zero systematics on overall signal sensitivity, creating constraint term" << endl;
-      ws->factory( "Gaussian::syst_nsig(cexpr::lnsig('log(nsig_nuis)', nsig_nuis), nsig_global, lnsig_sigma)" );
-    }
-
-    // background uncertainty
-    ws->factory( "lnbkg_sigma[0.1]" );
-    if (hasBgErr){
-      // non-zero background systematics: need to create
-      // the corresponding constraint term for the likelihood
-      std::cout << "[roostats_cl95]: non-zero background systematics, creating constraint term" << endl;
-      ws->factory( "Gaussian::syst_nbkg(cexpr::lnbkg('log(nbkg)',nbkg), lbkg_est, lnbkg_sigma)" );
-    }
-
-    ws->var("lnsig_sigma")->setVal(nsig_rel_err);
-    ws->var("lnbkg_sigma")->setVal(nbkg_rel_err);
-    ws->var("nsig_global")->setConstant(kTRUE);
-    ws->var("lnsig_sigma")->setConstant(kTRUE);
-    ws->var("lnbkg_sigma")->setConstant(kTRUE);
   }
   else if (_nuisance_model == 2){ // Gamma model for nuisance parameters
 
@@ -599,12 +496,7 @@ RooWorkspace * CL95Calc::makeWorkspace(Double_t ilum, Double_t slum,
     ws->factory( "expr::nsig_beta('nsig_rel_err*nsig_rel_err/nsig_global',nsig_rel_err,nsig_global)" );
     ws->factory( "expr::nsig_gamma('nsig_global*nsig_global/nsig_rel_err/nsig_rel_err+1.0',nsig_global,nsig_rel_err)" );
     ws->var("nsig_rel_err") ->setVal(nsig_rel_err);
-    if (hasSigErr){
-      // non-zero overall signal sensitivity systematics: need to create
-      // the corresponding constraint term for the likelihood
-      std::cout << "[roostats_cl95]: non-zero systematics on overall signal sensitivity, creating constraint term" << endl;
-      ws->factory( "Gamma::syst_nsig(nsig_nuis, nsig_gamma, nsig_beta, 0.0)" );
-    }
+    ws->factory( "Gamma::syst_nsig(nsig_nuis, nsig_gamma, nsig_beta, 0.0)" );
 
     // background uncertainty
     //ws->factory( "nbkg_global[1.0]" ); // mean of the nbkg nuisance par
@@ -613,12 +505,7 @@ RooWorkspace * CL95Calc::makeWorkspace(Double_t ilum, Double_t slum,
     ws->factory( "expr::nbkg_gamma('bkg_est*bkg_est/nbkg_rel_err/nbkg_rel_err+1.0',bkg_est,nbkg_rel_err)" );
     //ws->var("nbkg_global") ->setVal( bck );
     ws->var("nbkg_rel_err")->setVal(nbkg_rel_err);
-    if (hasBgErr){
-      // non-zero background systematics: need to create
-      // the corresponding constraint term for the likelihood
-      std::cout << "[roostats_cl95]: non-zero background systematics, creating constraint term" << endl;
-      ws->factory( "Gamma::syst_nbkg(nbkg, nbkg_gamma, nbkg_beta, 0.0)" );
-    }
+    ws->factory( "Gamma::syst_nbkg(nbkg, nbkg_gamma, nbkg_beta, 0.0)" );
 
     ws->var("nsig_rel_err")->setConstant(kTRUE);
     ws->var("nsig_global")->setConstant(kTRUE);
@@ -631,41 +518,16 @@ RooWorkspace * CL95Calc::makeWorkspace(Double_t ilum, Double_t slum,
   }
 
   // model with systematics
-  if (hasSigErr && hasBgErr){
-    std::cout << "[roostats_cl95]: factoring in signal sensitivity and background rate systematics constraint terms" << endl;
-    ws->factory( "PROD::model(model_core, syst_nsig, syst_nbkg)" );
-    ws->var("nsig_nuis") ->setConstant(kFALSE); // nuisance
-    ws->var("nbkg")      ->setConstant(kFALSE); // nuisance
-    ws->factory( "PROD::nuis_prior(syst_nsig,syst_nbkg)" );  
-  }
-  else if (hasSigErr && !hasBgErr){
-    std::cout << "[roostats_cl95]: factoring in signal sensitivity systematics constraint term" << endl;
-    ws->factory( "PROD::model(model_core, syst_nsig)" );
-    ws->var("nsig_nuis") ->setConstant(kFALSE); // nuisance
-    ws->var("nbkg")      ->setConstant(kTRUE); // nuisance
-    ws->factory( "PROD::nuis_prior(syst_nsig)" );  
-  }
-  else if (!hasSigErr && hasBgErr){
-    std::cout << "[roostats_cl95]: factoring in background rate systematics constraint term" << endl;
-    ws->factory( "PROD::model(model_core, syst_nbkg)" );
-    ws->var("nsig_nuis") ->setConstant(kTRUE); // nuisance
-    ws->var("nbkg")      ->setConstant(kFALSE); // nuisance
-    ws->factory( "PROD::nuis_prior(syst_nbkg)" );  
-  }
-  else{
-    ws->factory( "PROD::model(model_core)" );
-    ws->var("nsig_nuis") ->setConstant(kTRUE); // nuisance
-    ws->var("nbkg")      ->setConstant(kTRUE); // nuisance
-  }
+  ws->factory( "PROD::model(model_core, syst_nsig, syst_nbkg)" );
 
   // flat prior for the parameter of interest
   ws->factory( "Uniform::prior(xsec)" );  
+
 
   // parameter values
   ws->var("lumi")      ->setVal(ilum);
   ws->var("efficiency")->setVal(eff);
   ws->var("bkg_est")   ->setVal(bck);
-  ws->var("lbkg_est")   ->setVal(TMath::Log(bck));
   ws->var("xsec")      ->setVal(0.0);
   ws->var("nsig_nuis") ->setVal(1.0);
   ws->var("nbkg")      ->setVal(bck);
@@ -674,11 +536,10 @@ RooWorkspace * CL95Calc::makeWorkspace(Double_t ilum, Double_t slum,
   ws->var("lumi")      ->setConstant(kTRUE);
   ws->var("efficiency")->setConstant(kTRUE);
   ws->var("bkg_est")   ->setConstant(kTRUE);
-  ws->var("lbkg_est")   ->setConstant(kTRUE);
   ws->var("n")         ->setConstant(kFALSE); // observable
   ws->var("xsec")      ->setConstant(kFALSE); // parameter of interest
-  //ws->var("nsig_nuis") ->setConstant(kFALSE); // nuisance
-  //ws->var("nbkg")      ->setConstant(kFALSE); // nuisance
+  ws->var("nsig_nuis") ->setConstant(kFALSE); // nuisance
+  ws->var("nbkg")      ->setConstant(kFALSE); // nuisance
 
   // floating parameters ranges
   // crude estimates! Need to know data to do better
@@ -687,36 +548,24 @@ RooWorkspace * CL95Calc::makeWorkspace(Double_t ilum, Double_t slum,
   ws->var("nsig_nuis")->setRange( std::max(0.0, 1.0 - 5.0*nsig_rel_err), 1.0 + 5.0*nsig_rel_err);
   ws->var("nbkg")     ->setRange( std::max(0.0, bck - 5.0*sbck), bck + 5.0*sbck);
   ws->var("bkg_est")  ->setRange( std::max(0.0, bck - 5.0*sbck), bck + 5.0*sbck);
-  // FIXME: check for zeros in the log
-  ws->var("lbkg_est")  ->setRange( TMath::Log(ws->var("bkg_est")->getMin()), TMath::Log(ws->var("bkg_est")->getMin()));
   
   // Definition of observables and parameters of interest
 
   // observables
   RooArgSet obs(*ws->var("n"), "obs");
+  //ws->defineSet("obsSet","n");
 
   // global observables
-  //RooArgSet globalObs(*ws->var("nsig_global"), *ws->var("bkg_est"), "global_obs");
-  //RooArgSet globalObs(*ws->var("nsig_global"), "global_obs");
-  RooArgSet globalObs("global_obs");
-  if (hasSigErr) globalObs.add( *ws->var("nsig_global") );
-  if (hasBgErr){
-    if (_nuisance_model == 3){
-      globalObs.add( *ws->var("lbkg_est") );
-    }
-    else{
-      globalObs.add( *ws->var("bkg_est") );
-    }
-  }
+  RooArgSet globalObs(*ws->var("nsig_global"), *ws->var("bkg_est"), "global_obs");
 
   // parameters of interest
   RooArgSet poi(*ws->var("xsec"), "poi");
+  //ws->defineSet("poiSet","xsec");
 
   // nuisance parameters
-  //RooArgSet nuis(*ws->var("nsig_nuis"), *ws->var("nbkg"), "nuis");
-  RooArgSet nuis("nuis");
-  if (hasSigErr) nuis.add( *ws->var("nsig_nuis") );
-  if (hasBgErr) nuis.add( *ws->var("nbkg") );
+  RooArgSet nuis(*ws->var("nsig_nuis"), *ws->var("nbkg"), "nuis");
+  //RooArgSet nuis(*ws->var("lumi"), *pWs->var("eff_a"), *pWs->var("eff_b"), *pWs->var("tau"), "nuis");
+  //ws->defineSet("nuisanceSet","nsig_nuis,nbkg");
 
   // setup the S+B model
   SbModel.SetWorkspace(*ws);
@@ -914,107 +763,6 @@ double CL95Calc::printMcmcUpperLimit( std::string filename ){
 }
 
 
-
-Double_t CL95Calc::FC_calc(int Nbins, float conf_int, float ULprecision, bool UseAdaptiveSampling, bool CreateConfidenceBelt){
-
-
-  Double_t upper_limit = 0;
-  int cnt = 0;
-  bool verbose = true; //Set to true to see the output of each FC step
-
-  std::cout << "[roostats_cl95]: FC calculation is still experimental in this context!!!" << std::endl;
-      
-  std::cout << "[roostats_cl95]: Range of allowed cross section values: [" 
-	    << ws->var("xsec")->getMin() << ", " 
-	    << ws->var("xsec")->getMax() << "]" << std::endl;
-
-
-  //prepare Feldman-Cousins Calulator
-
-  delete fcCalc;
-  fcCalc = new FeldmanCousins(*data,SbModel);
-      
-  fcCalc->SetConfidenceLevel(conf_int); // confidence interval
-  //fcCalc->AdditionalNToysFactor(0.1); // to speed up the result 
-  fcCalc->UseAdaptiveSampling(UseAdaptiveSampling); // speed it up a bit
-  fcCalc->SetNBins(Nbins); // set how many points per parameter of interest to scan
-  fcCalc->CreateConfBelt(CreateConfidenceBelt); // save the information in the belt for plotting
-
-      
-  if(!SbModel.GetPdf()->canBeExtended()){
-    if(data->numEntries()==1)     
-      fcCalc->FluctuateNumDataEntries(false);
-    else
-      cout <<"Not sure what to do about this model" <<endl;
-  }
-
-  RooRealVar* firstPOI = (RooRealVar*) SbModel.GetParametersOfInterest()->first();
-  
-  double max = firstPOI->getMax();
-  double min = firstPOI->getMin();
-  double med = (max + min)/2.0;
-      
-  double maxPerm = firstPOI->getMax();
-  double minPerm = firstPOI->getMin();
-    
-  double UpperLimit = 0;
-  
-  PointSetInterval* interval = 0;
-
-  while ( 1 ){
-    
-    ++cnt;
-    firstPOI->setMax( max );
-    firstPOI->setMin( min );
-    
-    if ( verbose ) std::cout << "[FeldmanCousins]: Setting max/min/med to = " << max << " / " << min << " / " << med <<  std::endl;
-	
-    interval = fcCalc->GetInterval();
-    interval -> Delete();
-	
-    UpperLimit = interval -> UpperLimit(*firstPOI);
-    if ( verbose ) std::cout <<"[FeldmanCousins]: Updating Upper Limt to = "<< UpperLimit << std::endl;
-
-    if ( UpperLimit > 0.000001 ){
-
-      min = med;
-      med = (max + min)/2.0;
-      
-    }
-    else{
-      
-      max = med;
-      med = (max + min)/2.0;
-      
-    }
-    
-    if (  ( UpperLimit > 0.000001 ) && ( (max - min) < ULprecision)  ) {
-      upper_limit = UpperLimit;
-      std::cout <<"[FeldmanCousins]: In "<< cnt << " steps Upper Limt converged to " << upper_limit << std::endl;
-      break; 
-    }
-    
-    if ( cnt > 50 ) {
-      upper_limit = -1;
-      std::cout << std::endl;
-      std::cout <<"[FeldmanCousins     WARNING!!!!!!!!!!!!       ]: Calculator could not converge in under 50 steps. Returning Upper Limit of -1." << std::endl;
-      std::cout << std::endl;
-      break;
-    }
-
-  }
-      
-  ws->var("xsec")->setMax( maxPerm );
-  ws->var("xsec")->setMin( minPerm );
-
-  return upper_limit;
-
-}
-
-
-
-
-
 Double_t CL95Calc::cl95( std::string method, LimitResult * result ){
   //
   // Compute the observed limit
@@ -1032,7 +780,7 @@ Double_t CL95Calc::cl95( std::string method, LimitResult * result ){
   RooFit::MsgLevel msglevel = RooMsgService::instance().globalKillBelow();
   // get ugly RooFit print out of the way
   // FIXME: uncomment
-  RooMsgService::instance().setGlobalKillBelow(RooFit::FATAL);
+  //RooMsgService::instance().setGlobalKillBelow(RooFit::FATAL);
 
   Int_t _attempt = 0; // allow several attempts for limit calculation, stop after that
   while(1){
@@ -1058,7 +806,6 @@ Double_t CL95Calc::cl95( std::string method, LimitResult * result ){
       bcalc->SetName(namestring);
       bcalc->SetConfidenceLevel(0.95);
       bcalc->SetLeftSideTailFraction(0.0);
-      //bcalc->SetIntegrationType("ROOFIT");
       
       delete sInt;
       sInt = bcalc->GetInterval();
@@ -1094,18 +841,6 @@ Double_t CL95Calc::cl95( std::string method, LimitResult * result ){
       TStopwatch t;
       t.Start();
 
-      // load parameter point with the best fit to data
-      SbModel.LoadSnapshot();
-      RooRealVar * pPoi = (RooRealVar *)(SbModel.GetParametersOfInterest()->first());
-      // get POI upper error from the fit
-      Double_t poi_err = pPoi->getErrorHi();
-      // get POI upper range boundary
-      Double_t poi_upper_range = pPoi->getMax();
-      // get the upper range boundary for CLs as min of poi range and 5*error
-      Double_t upper_range = std::min(5.0*poi_err,poi_upper_range);
-      // debug output
-      //std::cout << "range, error, new range " << poi_upper_range << ", "<< poi_err << ", " << upper_range << std::endl;
-
       RooMsgService::instance().setGlobalKillBelow(RooFit::PROGRESS);
 
       std::vector<Double_t> lim = 
@@ -1114,11 +849,11 @@ Double_t CL95Calc::cl95( std::string method, LimitResult * result ){
 		      "BModel",
 		      "observed_data",
 		      0, // calculator type, 0-freq, 1-hybrid
-		      3, // test statistic, 0-lep, 1-tevatron, 2-PL, 3-PL 1-sided
+		      2, // test statistic, 0-lep, 1-tevatron, 2-PL, 3-PL 1-sided
 		      true, // useCls
 		      10, // npoints in the scan
 		      0, // poimin: use default is poimin >= poimax
-		      upper_range,
+		      ws->var("xsec")->getMax(), // poimax
 		      1000,// ntoys
 		      "test" );
       
@@ -1140,18 +875,6 @@ Double_t CL95Calc::cl95( std::string method, LimitResult * result ){
       upper_limit = lim[0];
 
     } // end of the CLs block
-    else if (method.find("fc") != std::string::npos){
-
-      int Nbins = 1;
-      float conf_int = 0.95;
-      float ULprecision = 0.1;
-      bool UseAdaptiveSampling = true;
-      bool CreateConfidenceBelt = true;
-      
-      
-      upper_limit = FC_calc(Nbins, conf_int, ULprecision, UseAdaptiveSampling, CreateConfidenceBelt);
-	
-    } // end of the FC block
     else{
 
       std::cout << "[roostats_cl95]: method " << method 
@@ -1165,7 +888,6 @@ Double_t CL95Calc::cl95( std::string method, LimitResult * result ){
     Double_t _poi_max_range = ws->var("xsec")->getMax();
 
     if (method.find("cls")!=std::string::npos) break;
-    if (method.find("fc") != std::string::npos ) break;
     // range too wide
     else if (upper_limit < _poi_max_range/10.0){
       std::cout << "[roostats_cl95]: POI range is too wide, will narrow the range and rerun" << std::endl;
@@ -1500,9 +1222,6 @@ Double_t roostats_cl95(Double_t ilum, Double_t slum,
   else if (method.find("cls") != std::string::npos){
     std::cout << "[roostats_cl95]: using CLs calculation" << endl;
   }
-  else if (method.find("fc") != std::string::npos){
-    std::cout << "[roostats_cl95]: using Feldman-Cousins approach" << endl;
-  }
   else if (method.find("workspace") != std::string::npos){
     std::cout << "[roostats_cl95]: no interval calculation, only create and save workspace" << endl;
   }
@@ -1539,7 +1258,6 @@ Double_t roostats_cl95(Double_t ilum, Double_t slum,
 					     bck, sbck,
 					     gauss,
 					     nuisanceModel );
-
   RooDataSet * data = (RooDataSet *)( theCalc.makeData( n )->Clone() );
   data->SetName("observed_data");
   ws->import(*data);
@@ -1621,13 +1339,7 @@ Double_t roostats_cla(Double_t ilum, Double_t slum,
     std::cout << "[roostats_cla]: using Bayesian calculation via numeric integration" << endl;
   }
   else if (method.find("mcmc") != std::string::npos){
-    std::cout << "[roostats_cl95]: using Bayesian calculation via numeric integration" << endl;
-  }
-  else if (method.find("cls") != std::string::npos){
-    std::cout << "[roostats_cl95]: using CLs calculation" << endl;
-  }
-  else if (method.find("fc") != std::string::npos){
-    std::cout << "[roostats_cl95]: using Feldman-Cousins approach" << endl;
+    std::cout << "[roostats_cla]: using Bayesian calculation via numeric integration" << endl;
   }
   else{
     std::cout << "[roostats_cla]: method " << method 
@@ -1663,18 +1375,9 @@ LimitResult roostats_clm(Double_t ilum, Double_t slum,
   
   LimitResult limit;
 
-  std::cout << "[roostats_clm]: estimating expected 95% C.L. upper limit" << endl;
+  std::cout << "[roostats_clm]: estimating average 95% C.L. upper limit" << endl;
   if (method.find("bayesian") != std::string::npos){
     std::cout << "[roostats_clm]: using Bayesian calculation via numeric integration" << endl;
-  }
-  else if (method.find("mcmc") != std::string::npos){
-    std::cout << "[roostats_cl95]: using Bayesian calculation via numeric integration" << endl;
-  }
-  else if (method.find("cls") != std::string::npos){
-    std::cout << "[roostats_cl95]: using CLs calculation" << endl;
-  }
-  else if (method.find("fc") != std::string::npos){
-    std::cout << "[roostats_cl95]: using Feldman-Cousins approach" << endl;
   }
   else{
     std::cout << "[roostats_clm]: method " << method 
@@ -1698,7 +1401,6 @@ LimitResult roostats_clm(Double_t ilum, Double_t slum,
 /////////////////////////////////////////////////////////////////////////
 //
 // CLs helper methods from Lorenzo Moneta
-// This is the core of the CLs calculation
 //
 
 bool plotHypoTestResult = false; 
@@ -1997,14 +1699,9 @@ HypoTestInverterResult *  RunInverter(RooWorkspace * w, const char * modelSBName
       hhc->SetToys(ntoys,ntoys); 
 
       // check for nuisance prior pdf 
-      //if (bModel->GetPriorPdf() && sbModel->GetPriorPdf() ) {
-      //   hhc->ForcePriorNuisanceAlt(*bModel->GetPriorPdf());
-      //   hhc->ForcePriorNuisanceNull(*sbModel->GetPriorPdf());
-      //}
-      RooAbsPdf * nuis_prior =  w->pdf("nuis_prior");
-      if (nuis_prior ) {
-         hhc->ForcePriorNuisanceAlt(*nuis_prior);
-         hhc->ForcePriorNuisanceNull(*nuis_prior);
+      if (bModel->GetPriorPdf() && sbModel->GetPriorPdf() ) {
+         hhc->ForcePriorNuisanceAlt(*bModel->GetPriorPdf());
+         hhc->ForcePriorNuisanceNull(*sbModel->GetPriorPdf());
       }
       else {
          if (bModel->GetNuisanceParameters() || sbModel->GetNuisanceParameters() ) {
