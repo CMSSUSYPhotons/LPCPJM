@@ -1,0 +1,10 @@
+universe = vanilla
+Executable = run.csh
+Output = condor_log/batch_$(cluster)_$(process).stdout
+Error  = condor_log/batch_$(cluster)_$(process).stderr
+Log    = condor_log/batch_$(cluster)_$(process).condor
+notification = Error
+Should_Transfer_Files = YES
+WhenToTransferOutput = ON_EXIT
+Arguments = $(process) bino
+Queue 441
