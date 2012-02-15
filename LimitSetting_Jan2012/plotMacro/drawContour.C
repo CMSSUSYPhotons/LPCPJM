@@ -136,12 +136,13 @@ void drawContour(TString bino="bino", TString jet="nojet", bool print=false) {
   TString title;
 
   TCanvas* can_acc = new TCanvas("can_acc_"+label,"can_acc_"+label,1000,800);
-  can_acc->SetRightMargin(0.15);
+  can_acc->SetRightMargin(0.19);
   h_xs[5]->GetXaxis()->SetNdivisions(505);
   h_xs[5]->GetYaxis()->SetNdivisions(505);
   h_xs[5]->GetYaxis()->SetTitleOffset(1.2);
-  title = ";m_{#tilde{q}} (GeV/c^{2});m_{#tilde{g}} (GeV/c^{2})";
-  if(bino.Contains("mNScan")) title = ";m_{#chi^{0}} (GeV/c^{2});m_{#tilde{g}} (GeV/c^{2})";
+  h_xs[5]->GetZaxis()->SetTitleOffset(1.2);
+  title = ";m_{#tilde{q}} (GeV/c^{2});m_{#tilde{g}} (GeV/c^{2});Acceptance";
+  if(bino.Contains("mNScan")) title = ";m_{#chi^{0}} (GeV/c^{2});m_{#tilde{g}} (GeV/c^{2});Acceptance";
   h_xs[5]->SetTitle(title);
   h_xs[5]->Draw(option2D);
   if(bino.Contains("mNScan")){
@@ -156,13 +157,14 @@ void drawContour(TString bino="bino", TString jet="nojet", bool print=false) {
 
 
   TCanvas* can_xs = new TCanvas("can_xsec_"+label,"can_xsec_"+label,1000,800);
-  can_xs->SetRightMargin(0.15);
+  can_xs->SetRightMargin(0.17);
   can_xs->SetLogz();
   h_xs[0]->GetXaxis()->SetNdivisions(505);
   h_xs[0]->GetYaxis()->SetNdivisions(505);
   h_xs[0]->GetYaxis()->SetTitleOffset(1.2);
-  title = ";m_{#tilde{q}} (GeV/c^{2});m_{#tilde{g}} (GeV/c^{2})";
-  if(bino.Contains("mNScan")) title = ";m_{#chi^{0}} (GeV/c^{2});m_{#tilde{g}} (GeV/c^{2})";
+  h_xs[0]->GetZaxis()->SetTitleOffset(1.0);
+  title = ";m_{#tilde{q}} (GeV/c^{2});m_{#tilde{g}} (GeV/c^{2});Cross Section (pb)";
+  if(bino.Contains("mNScan")) title = ";m_{#chi^{0}} (GeV/c^{2});m_{#tilde{g}} (GeV/c^{2});Cross Section (pb)";
   h_xs[0]->SetTitle(title);
   h_xs[0]->Draw(option2D);
   if(bino.Contains("mNScan")){
@@ -175,12 +177,18 @@ void drawContour(TString bino="bino", TString jet="nojet", bool print=false) {
   }
 
   TCanvas* can_limit = new TCanvas("can_limit_"+label,"can_limit_"+label,1000,800);
-  can_limit->SetRightMargin(0.15);
+  can_limit->SetRightMargin(0.2);
   h_limit[0]->GetXaxis()->SetNdivisions(505);
   h_limit[0]->GetYaxis()->SetNdivisions(505);
   h_limit[0]->GetYaxis()->SetTitleOffset(1.2);
-  title = ";m_{#tilde{q}} (GeV/c^{2});m_{#tilde{g}} (GeV/c^{2})";
-  if(bino.Contains("mNScan")) title = ";m_{#chi^{0}} (GeV/c^{2});m_{#tilde{g}} (GeV/c^{2})";
+  h_limit[0]->GetZaxis()->SetTitleOffset(1.3);
+  if(bino.Contains("wino")){
+    can_limit->SetRightMargin(0.17);
+    h_limit[0]->GetZaxis()->SetTitleOffset(1.0);
+  }
+
+  title = ";m_{#tilde{q}} (GeV/c^{2});m_{#tilde{g}} (GeV/c^{2});95% CL Upper Limit (pb)";
+  if(bino.Contains("mNScan")) title = ";m_{#chi^{0}} (GeV/c^{2});m_{#tilde{g}} (GeV/c^{2});95% CL Upper Limit (pb)";
   h_limit[0]->SetTitle(title);
   h_limit[0]->Draw(option2D);
   if(bino.Contains("mNScan")){
@@ -411,7 +419,7 @@ void drawContour(TString bino="bino", TString jet="nojet", bool print=false) {
   lat->SetTextSize(30);
   lat->Draw("same");
 
-  TLatex* lat2 = new TLatex(leg_xmin,0.83,"#int #font[12]{L}dt = 4.7fb^{  -1} @  #sqrt{s} = 7 TeV");
+  TLatex* lat2 = new TLatex(leg_xmin,0.83,"#int #font[12]{L}dt = 4.7fb^{-1}, #sqrt{s} = 7 TeV");
   lat2->SetNDC(true);
   lat2->SetTextFont(43);
   lat2->SetTextSize(24);
