@@ -1,5 +1,0 @@
-{
-
-  gSystem->Load("libSusyEvent.so");
-
-}
