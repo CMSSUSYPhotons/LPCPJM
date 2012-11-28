@@ -1,8 +1,0 @@
-
-To set up, follow instructions in
-https://twiki.cern.ch/twiki/bin/viewauth/CMS/SWGuideHiggsAnalysisCombinedLimit
-
-makeTemplate.C : create datacard from inputHists
-condor_submit/run.csh : submit jobs to get limits based on templates created by makeTemplate.C
-plotMacro/makeTable.sh : create inputs for drawContour.C from job outputs
-plotMacro/drawContour.C : plot exclusion curves from tables created by makeTable.sh
