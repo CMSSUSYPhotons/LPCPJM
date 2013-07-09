@@ -15,7 +15,7 @@ void ana(TString outputName="analysis"){
 
   // chain of inputs
   TChain chain("susyTree");
-  chain.Add("susyEvents.root");
+  chain.Add("STANDARD.root");
 
   // Disabling unused branches will speed up the processing significantly, but risks inconsistencies if wrong trees are turned off.
   // Make sure you know what you are doing.
@@ -36,7 +36,8 @@ void ana(TString outputName="analysis"){
   chain.SetBranchStatus("muons_muons*", 1);
   chain.SetBranchStatus("electrons_gsfElectrons*", 1);
   chain.SetBranchStatus("pfJets_ak5*", 1);
-  chain.SetBranchStatus("met_pfType01SysShiftCorrectedMet*", 1);
+  chain.SetBranchStatus("met_pfType01CorrectedMet*", 1);
+  chain.SetBranchStatus("pfParticles*", 1);
 
   if(chain.LoadTree(0) != 0){
     cerr << "Error with input chain. Do the files exist?" << endl;
